@@ -1,0 +1,44 @@
+plugins {
+  id "com.marklogic.ml-gradle" version "2.6.0"
+
+  // The following plugins are optional
+
+  // The Java plugin is used to compile and run JUnit tests
+  id "java"
+
+  // These plugins are used to generate IDE files
+  id "eclipse"
+  id "idea"
+}
+
+group 'com.marklogic'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+
+    // MarkLogic Maven Repository
+	maven { url "https://developer.marklogic.com/maven2/" }
+}
+
+dependencies {
+    // used for logging purposes
+    compile 'org.slf4j:slf4j-simple:1.7.25'
+
+    compile "com.marklogic:java-client-api:4.0.0-EA4"
+
+    compile 'org.springframework:spring-context:4.3.8.RELEASE'
+
+    compile "org.jdom:jdom2:2.0.6"
+
+    compile "com.marklogic:ml-javaclient-util:2.13.0"
+
+    // testing libraries
+    testCompile "junit:junit:4.12"
+    testCompile "org.xmlunit:xmlunit-core:2.3.0"
+    testCompile "com.marklogic:ml-junit:2.6.0"
+
+}
+
