@@ -71,13 +71,13 @@ public class MigrateSqlDatabaseJob implements JobExecutionListener {
         reader.setSql("SELECT * FROM CUSTOMER");
 
         ItemProcessor<Customer, DocumentWriteOperation> processor = new ItemProcessor<Customer, DocumentWriteOperation>() {
-
             @Override
             public DocumentWriteOperation process(Customer item) throws Exception {
-                String xml = "<customer>" + item.lastName + "," + item.firstName + "</customer>";
                 String uri = item.id + ".xml";
                 DocumentMetadataHandle metadata = new DocumentMetadataHandle().withCollections("customer");
-                return new DocumentWriteOperationImpl(DocumentWriteOperation.OperationType.DOCUMENT_WRITE, uri, metadata, new StringHandle(xml));
+                return new DocumentWriteOperationImpl(
+                        DocumentWriteOperation.OperationType.DOCUMENT_WRITE,
+                        uri, metadata, new StringHandle(item.toXml()));
             }
         };
 
@@ -126,6 +126,12 @@ public class MigrateSqlDatabaseJob implements JobExecutionListener {
             this.id = Integer.toString(id);
             this.firstName = firstName;
             this.lastName = lastName;
+        }
+        public String toXml() {
+            return "<customer id=\"" + this.id + "\">" +
+                      "<last-name>" + this.lastName + "</last-name>" +
+                      "<first-name>" + this.firstName + "</first-name>" +
+                    "</customer>";
         }
     }
 }
