@@ -6,7 +6,6 @@ import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.document.DocumentManager;
 import com.marklogic.client.document.DocumentUriTemplate;
 import com.marklogic.client.document.JSONDocumentManager;
-import com.marklogic.client.helper.DatabaseClientProvider;
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.Format;
 import com.marklogic.client.io.JacksonHandle;
