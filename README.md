@@ -13,3 +13,16 @@ Install the MarkLogic database and application server
 Run the unit tests
 
     ./gradlew test
+    
+Load a sample RDBMS
+
+    ./gradlew loadH2Data
+    
+Create RDBMS to MarkLogic batch program
+
+    ./gradlew installDist
+    
+Execute program
+
+    build\install\cookbook\bin\cookbook.bat com.marklogic.cookbook.SpringBatchConfig importCustomersJob
+    
