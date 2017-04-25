@@ -6,9 +6,7 @@ plugins {
   // The Java plugin is used to compile and run JUnit tests
   id "java"
 
-  // These plugins are used to generate IDE files
-  id "eclipse"
-  id "idea"
+  id "application"
 }
 
 group 'com.marklogic'
@@ -21,6 +19,9 @@ repositories {
 
     // MarkLogic Maven Repository
 	maven { url "https://developer.marklogic.com/maven2/" }
+
+    //Spring Maven Repository
+    maven { url "http://repo.spring.io/milestone" }
 }
 
 dependencies {
@@ -29,10 +30,10 @@ dependencies {
 
     compile "com.marklogic:marklogic-client-api:4.0.0-EA4"
 
+    compile "org.springframework.batch:spring-batch-core:3.0.7.RELEASE"
     compile 'org.springframework:spring-context:4.3.8.RELEASE'
-
-    compile "org.jdom:jdom2:2.0.6"
-
+    compile "org.springframework:spring-jdbc:4.3.8.RELEASE"
+    compile "com.h2database:h2:1.4.193"
     compile "com.marklogic:ml-javaclient-util:2.13.0"
 
     // testing libraries
@@ -40,5 +41,29 @@ dependencies {
     testCompile "org.xmlunit:xmlunit-core:2.3.0"
     testCompile "com.marklogic:ml-junit:2.6.0"
 
+
+    runtime "com.h2database:h2:1.4.193"
+
 }
 
+mainClassName = "org.springframework.batch.core.launch.support.CommandLineJobRunner"
+
+// This task is for running the examples
+task runH2DataManager(type: JavaExec) {
+    classpath = configurations.runtime
+    main = "org.h2.tools.Console"
+    args = [
+            "-url", "jdbc:h2:file:./data/sample",
+            "-user", "sa"
+    ]
+}
+
+task loadH2Data(type: JavaExec) {
+    classpath = configurations.runtime
+    main = "org.h2.tools.RunScript"
+    args = [
+            "-url", "jdbc:h2:file:./data/sample",
+            "-user", "sa",
+            "-script", "./src/test/resources/db/sampledata.sql"
+    ]
+}

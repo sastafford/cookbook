@@ -38,7 +38,7 @@ public class BestInsertDocumentTest extends AbstractSpringTest {
 
         StructuredQueryDefinition querydef =
                 qb.and(
-                        qb.collection("test-json"));
+                        qb.collection("dmsdk"));
 
         Fragment frag = new Fragment(querydef.serialize(), null);
         logger.info(frag.getPrettyXml());
