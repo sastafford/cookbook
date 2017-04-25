@@ -13,7 +13,6 @@ import com.marklogic.client.io.JacksonHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +35,11 @@ public class BestInsertDocument {
             .newWriteBatcher()
             .withJobName("writeSampleDocs")
             .withBatchSize(BATCH_SIZE)
+            .withThreadCount(4)
             // Configure listeners for asynchronous lifecycle events
             // Success:
             .onBatchSuccess(batch ->
-                logger.info(batch.getJobBatchNumber() + " / " + batch.getJobWritesSoFar()))
+                logger.info(Long.toString(batch.getJobWritesSoFar())))
             // Failure:
             .onBatchFailure((batch, throwable) -> logger.warn("Batch write fail"));
 
@@ -47,8 +47,8 @@ public class BestInsertDocument {
     }
 
     public void insertJsonDocuments() throws Exception {
-        List<DocumentWriteOperation> docs = new ArrayList<DocumentWriteOperation>();
         for (int loop = 0; loop < 100; loop++) {
+            List<DocumentWriteOperation> docs = new ArrayList<DocumentWriteOperation>();
             for (int i = 0; i < BATCH_SIZE; i++) {
                 // Add Content
                 ObjectMapper mapper = new ObjectMapper();
@@ -90,6 +90,7 @@ public class BestInsertDocument {
         for (DocumentWriteOperation item: items) {
             writer.add(item.getUri(), item.getMetadata(), item.getContent());
         }
+        writer.flushAndWait();
 
     }
 }
