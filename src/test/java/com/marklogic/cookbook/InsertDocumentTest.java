@@ -2,7 +2,6 @@ package com.marklogic.cookbook;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
-import com.marklogic.client.document.GenericDocumentManager;
 import com.marklogic.client.io.SearchHandle;
 import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StructuredQueryBuilder;

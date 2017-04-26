@@ -50,6 +50,7 @@ mainClassName = "org.springframework.batch.core.launch.support.CommandLineJobRun
 
 // Starts up the HyperSQL Data Manager
 task runH2DataManager(type: JavaExec) {
+    group = "HSQLDB"
     classpath = configurations.runtime
     main = "org.h2.tools.Console"
     args = [
@@ -60,6 +61,7 @@ task runH2DataManager(type: JavaExec) {
 
 // Loads H2 database with sample data
 task loadH2Data(type: JavaExec) {
+    group = "HSQLDB"
     classpath = configurations.runtime
     main = "org.h2.tools.RunScript"
     args = [

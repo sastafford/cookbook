@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.Random;
 
 public class InsertDocument {
 
@@ -37,6 +39,8 @@ public class InsertDocument {
         long byteLength = xml.getBytes().length;
         handle.setByteLength(byteLength);
         int hashCode = handle.hashCode();
+        Random r = new Random();
+        int x = r.nextInt();
 
         DocumentMetadataHandle metadata =
                 new DocumentMetadataHandle()
@@ -76,6 +80,8 @@ public class InsertDocument {
         long byteLength = json.getBytes().length;
         handle.setByteLength(byteLength);
         int hashCode = handle.hashCode();
+        Random r = new Random();
+        int x = r.nextInt();
 
         DocumentMetadataHandle metadata =
                 new DocumentMetadataHandle()
@@ -87,7 +93,7 @@ public class InsertDocument {
         JSONDocumentManager docMgr = client.newJSONDocumentManager();
 
         // Create URI
-        String uri = "/test/sample-" + hashCode + ".json";
+        String uri = "/test/sample-" + hashCode + x + ".json";
 
         docMgr.write(uri, metadata, handle);
 
