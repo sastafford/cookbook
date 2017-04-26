@@ -6,7 +6,10 @@ import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StructuredQueryBuilder;
 import com.marklogic.client.query.StructuredQueryDefinition;
 import com.marklogic.junit.Fragment;
+import com.marklogic.junit.MarkLogicNamespaceProvider;
+import com.marklogic.junit.NamespaceProvider;
 import com.marklogic.junit.spring.AbstractSpringTest;
+import org.jdom2.Namespace;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +43,7 @@ public class BestInsertDocumentTest extends AbstractSpringTest {
                 qb.and(
                         qb.collection("dmsdk"));
 
-        Fragment frag = new Fragment(querydef.serialize(), null);
+        Fragment frag = new Fragment(querydef.serialize());
         logger.info(frag.getPrettyXml());
 
         SearchHandle results = queryMgr.search(querydef, new SearchHandle());

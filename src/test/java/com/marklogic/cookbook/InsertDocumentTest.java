@@ -56,7 +56,6 @@ public class InsertDocumentTest {
 
     @Test
     public void insertJsonDocumentTest() throws IOException {
-
         // Insert JSON Document
         new InsertDocument().insertJsonDocument();
 

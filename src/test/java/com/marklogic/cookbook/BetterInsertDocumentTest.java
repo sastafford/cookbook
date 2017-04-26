@@ -42,7 +42,7 @@ public class BetterInsertDocumentTest extends AbstractSpringTest {
                 qb.and(
                         qb.collection("test-xml"));
 
-        Fragment frag = new Fragment(querydef.serialize(), null);
+        Fragment frag = new Fragment(querydef.serialize());
         logger.info(frag.getPrettyXml());
 
         SearchHandle results = queryMgr.search(querydef, new SearchHandle());
@@ -63,7 +63,7 @@ public class BetterInsertDocumentTest extends AbstractSpringTest {
                 qb.and(
                         qb.collection("test-json"));
 
-        Fragment frag = new Fragment(querydef.serialize(), null);
+        Fragment frag = new Fragment(querydef.serialize());
         logger.info(frag.getPrettyXml());
 
         SearchHandle results = queryMgr.search(querydef, new SearchHandle());
