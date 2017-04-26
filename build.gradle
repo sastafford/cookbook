@@ -1,11 +1,6 @@
 plugins {
   id "com.marklogic.ml-gradle" version "2.6.0"
-
-  // The following plugins are optional
-
-  // The Java plugin is used to compile and run JUnit tests
   id "java"
-
   id "application"
 }
 
@@ -29,26 +24,31 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.25'
 
     compile "com.marklogic:marklogic-client-api:4.0.0-EA4"
+    compile "com.marklogic:ml-javaclient-util:2.13.0"
 
+    //Spring libraries
     compile "org.springframework.batch:spring-batch-core:3.0.7.RELEASE"
     compile 'org.springframework:spring-context:4.3.8.RELEASE'
     compile "org.springframework:spring-jdbc:4.3.8.RELEASE"
+
+    //HyperSQL Database
     compile "com.h2database:h2:1.4.193"
-    compile "com.marklogic:ml-javaclient-util:2.13.0"
+
 
     // testing libraries
     testCompile "junit:junit:4.12"
     testCompile "org.xmlunit:xmlunit-core:2.3.0"
     testCompile "com.marklogic:ml-junit:2.6.0"
 
-
+    // Used for running HyperSQL
     runtime "com.h2database:h2:1.4.193"
 
 }
 
+// The main program for the RDBMS migration program
 mainClassName = "org.springframework.batch.core.launch.support.CommandLineJobRunner"
 
-// This task is for running the examples
+// Starts up the HyperSQL Data Manager
 task runH2DataManager(type: JavaExec) {
     classpath = configurations.runtime
     main = "org.h2.tools.Console"
@@ -58,6 +58,7 @@ task runH2DataManager(type: JavaExec) {
     ]
 }
 
+// Loads H2 database with sample data
 task loadH2Data(type: JavaExec) {
     classpath = configurations.runtime
     main = "org.h2.tools.RunScript"
