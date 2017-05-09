@@ -1,20 +1,19 @@
 package com.marklogic.cookbook;
 
 import com.marklogic.client.DatabaseClient;
-import com.marklogic.client.datamovement.DataMovementManager;
-import com.marklogic.client.datamovement.JobTicket;
-import com.marklogic.client.datamovement.WriteBatcher;
+import com.marklogic.client.datamovement.*;
+import com.marklogic.client.document.DocumentPatchBuilder;
 import com.marklogic.client.document.DocumentWriteOperation;
+import com.marklogic.client.document.XMLDocumentManager;
 import com.marklogic.client.impl.DocumentWriteOperationImpl;
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.StringHandle;
+import com.marklogic.client.io.marker.DocumentPatchHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.annotation.AfterJob;
-import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.core.annotation.BeforeJob;
-import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -24,7 +23,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -56,8 +54,6 @@ public class MigrateSqlDatabaseJob implements JobExecutionListener {
     @Bean
     @JobScope
     public Step step1(StepBuilderFactory stepBuilderFactory) {
-        JobTicket ticket = manager.startJob(writer);
-
         JdbcCursorItemReader<Customer> reader = new JdbcCursorItemReader<Customer>();
         reader.setRowMapper(new RowMapper<Customer>() {
             @Override
@@ -108,14 +104,54 @@ public class MigrateSqlDatabaseJob implements JobExecutionListener {
                 .withJobName("writeSampleDocs")
                 .withBatchSize(BATCH_SIZE)
                 .withThreadCount(4)
-                .onBatchSuccess(batch -> logger.info(Long.toString(batch.getJobWritesSoFar())))
                 .onBatchFailure((batch, throwable) -> logger.warn("Batch write fail"));
+        writer.setBatchSuccessListeners(new WriteStatusToMarkLogic(client));
+        writer.onBatchSuccess(batch -> logger.info(Long.toString(batch.getJobWritesSoFar())));
+        JobTicket ticket = manager.startJob(writer);
     }
 
     @AfterJob
     public void afterJob(JobExecution jobExecution) {
         manager.stopJob(writer);
         manager.release();
+    }
+
+    public class WriteStatusToMarkLogic implements WriteBatchListener {
+
+        DatabaseClient client;
+        XMLDocumentManager xmlDocMgr;
+        JobTicket ticket;
+        DocumentMetadataHandle metadata = new DocumentMetadataHandle().withCollections("job-ticket");
+        String uri;
+        boolean ticketDocNotCreated = true;
+
+        public WriteStatusToMarkLogic(DatabaseClient client) {
+            xmlDocMgr = client.newXMLDocumentManager();
+        }
+
+        private void initJobTicket(JobTicket ticket) {
+            uri = "/ticket/" + ticket.getJobId() + ".xml";
+            String xml =
+                    "<ticket>" +
+                            "<id>" + ticket.getJobId() + "</id>" +
+                            "<name>" + ticket.getJobType() + "</name>" +
+                    "</ticket>";
+            xmlDocMgr.write(uri, metadata, new StringHandle(xml));
+        }
+
+        @Override
+        public void processEvent(WriteBatch batch) {
+            JobTicket ticket = batch.getJobTicket();
+            if (ticketDocNotCreated) {
+                initJobTicket(ticket);
+                ticketDocNotCreated = false;
+            }
+            DocumentPatchBuilder builder = xmlDocMgr.newPatchBuilder();
+            builder.insertFragment("/ticket", DocumentPatchBuilder.Position.LAST_CHILD,
+                    "<numberOfWrites>" + batch.getJobWritesSoFar()  +  "</numberOfWrites>");
+            DocumentPatchHandle handle = builder.build();
+            xmlDocMgr.patch(uri, handle);
+        }
     }
 
     public class Customer {
