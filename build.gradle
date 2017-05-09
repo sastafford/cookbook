@@ -23,7 +23,7 @@ dependencies {
     // used for logging purposes
     compile 'org.slf4j:slf4j-simple:1.7.25'
 
-    compile "com.marklogic:marklogic-client-api:4.0.0-EA4"
+    compile "com.marklogic:marklogic-client-api:4.0.1"
     compile "com.marklogic:ml-javaclient-util:2.13.0"
 
     //Spring libraries
