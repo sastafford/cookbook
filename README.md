@@ -1,28 +1,42 @@
-# Instructions
+# What is the Cookbook?
+The cookbook project are a set of recipes to help prescribe best practices for using MarkLogic.
 
-The instructions assumes MarkLogic has been installed.  The following steps will initialize MarkLogic with the configuration found in gradle.properties
+# What do I need to run the recipes?
+
+## Required Software
+
+ * MarkLogic 9+
+ * Java Development Kit 1.8+
+ * (Optional) Gradle 3+
+
+## Set up  
+
+If you have a brand new install of MarkLogic and have not initialized MarkLogic and added an admin user, then execute the following steps otherwise skip to step #3.  
+
+1) Review the host, username, and password properties found in gradle.properties 
+
+2) Run the following gradle commands
     
     gradlew mlInit
     gradlew mlInstallAdmin
 
-Install the MarkLogic database and application server
+3) Install the MarkLogic database and application server
 
-     ./gradlew mlDeploy
-     
+     ./gradlew mlDeploy  
 
-Run the unit tests
+4) Run the unit tests
 
     ./gradlew test
-    
-Load a sample RDBMS
+ 
+5) Load a sample RDBMS
 
     ./gradlew loadH2Data
-    
-Create RDBMS to MarkLogic batch program
+ 
+6) Create RDBMS to MarkLogic batch program
 
     ./gradlew installDist
-    
-Execute program
+ 
+7) Execute program
 
     build\install\cookbook\bin\cookbook.bat com.marklogic.cookbook.SpringBatchConfig importCustomersJob
-    
+ 
