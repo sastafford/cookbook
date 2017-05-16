@@ -8,6 +8,20 @@ The cookbook project are a set of recipes to help prescribe best practices for u
  * MarkLogic 9+
  * Java Development Kit 1.8+
  * (Optional) Gradle 3+
+ 
+## References
+
+ * [MarkLogic Client REST API](http://docs.marklogic.com/REST/client) 
+ * [MarkLogic Management REST API](http://docs.marklogic.com/REST/management) 
+ * [Java Client API](http://docs.marklogic.com/javadoc/client/index.html)
+   * Code Examples: com.marklogic.client.example
+ * [Structured Queries](http://docs.marklogic.com/guide/search-dev/structured-query)
+
+## Recipes
+
+ * [Build and Deploy](ml-gradle.md)
+ * [Automated Tests](automated-testing.md)
+ * [Load data from Relational Database](import-rdb.md)
 
 ## Set up  
 
