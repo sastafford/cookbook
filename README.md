@@ -16,6 +16,8 @@ The cookbook project are a set of recipes to help prescribe best practices for u
  * [Java Client API](http://docs.marklogic.com/javadoc/client/index.html)
    * Code Examples: com.marklogic.client.example
  * [Structured Queries](http://docs.marklogic.com/guide/search-dev/structured-query)
+ 
+ ![Stack](./images/java-client-stack.jpg)
 
 ## Recipes
 

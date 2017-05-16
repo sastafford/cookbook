@@ -2,7 +2,9 @@
 
 The MarkLogic Gradle Plugin (ml-gradle) helps developers build, automate, and deliver better software faster.  Starting with the second layer in Figure 2, the Management API is a REST-based API that allows you to administer MarkLogic Server and access MarkLogic Server instrumentation with no provisioning or set-up. You can use the API to perform administrative tasks such as initializing or extending a cluster; creating databases, forests, and App Servers; and managing tiered storage partitions. The API also provides the ability to capture detailed information on MarkLogic Server objects and processes.  Java developers can interact with the Management API using a Java library called ml-app-deployer.  This layer can enable a configuration coordinator to read/write files from a filesystem and push those configuration resources into MarkLogic and setup an environment.  Gradle is an off the shelf developer power tool that enables developers to run tasks (programs) and execute an action.  Plugins expand the types of tasks that to be executed.  The gradle plugin that allows you to run tasks against the Management REST API is the ml-gradle plugin.  
  
-##MarkLogic Version
+![MarkLogic Gradle Plugin](./images/ml-gradle.jpg) 
+ 
+## MarkLogic Version
 MarkLogic 8.0-4+
 
 ## References
